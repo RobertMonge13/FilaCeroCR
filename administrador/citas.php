@@ -63,135 +63,237 @@ $resultado = $conexion->query($sql);
 
     <title>Gestión de Citas - FilaCeroCR</title>
 
+    <link rel="stylesheet"
+          href="../css/estilos_generales.css">
+
 </head>
+
 
 <body>
 
-    <h1>Gestión de Citas</h1>
 
-    <p>
+<nav class="navbar">
+
+    <a href="../index.php"
+       class="logo">
+
+        FilaCeroCR
+
+    </a>
+
+
+    <div class="nav-links">
+
         <a href="panel_admin.php">
-            Volver al Panel Administrativo
+            Inicio
         </a>
-    </p>
 
-    <hr>
+        <a href="servicios.php">
+            Servicios
+        </a>
 
-    <h2>Citas Registradas</h2>
+        <a href="clientes.php">
+            Clientes
+        </a>
 
-    <table border="1"
-           cellpadding="8"
-           cellspacing="0">
+        <a href="citas.php">
+            Citas
+        </a>
 
-        <tr>
+        <a href="horarios.php">
+            Horarios
+        </a>
 
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Servicio</th>
-            <th>Profesional</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Estado</th>
-            <th>Acción</th>
+        <a href="../cerrar_sesion.php">
+            Cerrar sesión
+        </a>
 
-        </tr>
+    </div>
 
-        <?php
+</nav>
 
-        if ($resultado->num_rows > 0) {
 
-            while ($row = $resultado->fetch_assoc()) {
+<div class="contenedor">
 
-                echo "<tr>";
 
-                echo "<td>" .
-                     $row['id_cita'] .
-                     "</td>";
+    <div class="encabezado-flex">
 
-                echo "<td>" .
-                     htmlspecialchars($row['cliente']) .
-                     "</td>";
+        <div class="titulo-seccion">
 
-                echo "<td>" .
-                     htmlspecialchars($row['nombre_servicio']) .
-                     "</td>";
+            <h1>Gestión de Citas</h1>
 
-                echo "<td>" .
-                     htmlspecialchars($row['profesional']) .
-                     "</td>";
+            <p>
+                Consulta y actualiza el estado
+                de las reservaciones registradas.
+            </p>
 
-                echo "<td>" .
-                     $row['fecha'] .
-                     "</td>";
+        </div>
 
-                echo "<td>" .
-                     $row['hora'] .
-                     "</td>";
 
-                echo "<td>" .
-                     $row['estado'] .
-                     "</td>";
+        <a href="panel_admin.php"
+           class="btn btn-outline">
 
-                echo "<td>";
+            Volver al panel
 
-                echo "<form method='POST'>";
+        </a>
 
-                echo "<input type='hidden'
-                             name='id_cita'
-                             value='" .
-                             $row['id_cita'] .
-                             "'>";
+    </div>
 
-                echo "<select name='estado'>";
 
-                echo "<option value='Pendiente'>
-                        Pendiente
-                      </option>";
+    <div class="tarjeta"
+         style="margin-bottom: 30px;">
 
-                echo "<option value='Confirmada'>
-                        Confirmada
-                      </option>";
+        <h3>Reservaciones</h3>
 
-                echo "<option value='En atención'>
-                        En atención
-                      </option>";
+        <p>
+            Desde esta sección puedes consultar
+            las citas programadas y actualizar
+            su estado de atención.
+        </p>
 
-                echo "<option value='Finalizada'>
-                        Finalizada
-                      </option>";
+    </div>
 
-                echo "<option value='Cancelada'>
-                        Cancelada
-                      </option>";
 
-                echo "</select>";
+    <div class="tabla-contenedor">
 
-                echo " ";
+        <table>
 
-                echo "<button type='submit'
-                             name='actualizar_estado'>
-                        Cambiar Estado
-                      </button>";
+            <tr>
 
-                echo "</form>";
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Profesional</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado actual</th>
+                <th>Actualizar</th>
 
-                echo "</td>";
+            </tr>
 
-                echo "</tr>";
+
+            <?php
+
+            if ($resultado->num_rows > 0) {
+
+                while ($row = $resultado->fetch_assoc()) {
+
+                    echo "<tr>";
+
+                    echo "<td>" .
+                         $row['id_cita'] .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['cliente']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['nombre_servicio']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['profesional']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         $row['fecha'] .
+                         "</td>";
+
+                    echo "<td>" .
+                         $row['hora'] .
+                         "</td>";
+
+                    echo "<td>";
+
+                    echo "<strong>" .
+                         htmlspecialchars($row['estado']) .
+                         "</strong>";
+
+                    echo "</td>";
+
+                    echo "<td>";
+
+                    echo "<form method='POST'
+                                style='padding:0;
+                                       margin:0;
+                                       border:none;
+                                       box-shadow:none;
+                                       display:flex;
+                                       gap:8px;
+                                       align-items:center;'>";
+
+                    echo "<input type='hidden'
+                                 name='id_cita'
+                                 value='" .
+                                 $row['id_cita'] .
+                                 "'>";
+
+                    echo "<select name='estado'
+                                  style='margin:0;
+                                         min-width:130px;'>";
+
+                    $estados = [
+                        "Pendiente",
+                        "Confirmada",
+                        "En atención",
+                        "Finalizada",
+                        "Cancelada"
+                    ];
+
+                    foreach ($estados as $estado) {
+
+                        $seleccionado =
+                            ($row['estado'] == $estado)
+                            ? "selected"
+                            : "";
+
+                        echo "<option value='" .
+                             $estado .
+                             "' " .
+                             $seleccionado .
+                             ">" .
+                             $estado .
+                             "</option>";
+                    }
+
+                    echo "</select>";
+
+                    echo "<button type='submit'
+                                 name='actualizar_estado'
+                                 class='btn btn-primary btn-small'>
+
+                            Cambiar
+
+                          </button>";
+
+                    echo "</form>";
+
+                    echo "</td>";
+
+                    echo "</tr>";
+                }
+
+            } else {
+
+                echo "<tr>
+
+                        <td colspan='8'>
+                            No hay citas registradas.
+                        </td>
+
+                      </tr>";
             }
 
-        } else {
+            ?>
 
-            echo "<tr>
-                    <td colspan='8'>
-                        No hay citas registradas.
-                    </td>
-                  </tr>";
-        }
+        </table>
 
-        ?>
+    </div>
 
-    </table>
+
+</div>
+
 
 </body>
 

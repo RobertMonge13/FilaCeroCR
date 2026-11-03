@@ -48,7 +48,9 @@ if (isset($_GET['eliminar'])) {
 
 
 // CONSULTAR SERVICIOS
-$sql = "SELECT * FROM servicios ORDER BY id_servicio ASC";
+$sql = "SELECT *
+        FROM servicios
+        ORDER BY id_servicio ASC";
 
 $resultado = $conexion->query($sql);
 
@@ -67,132 +69,231 @@ $resultado = $conexion->query($sql);
 
     <title>Gestión de Servicios - FilaCeroCR</title>
 
+    <link rel="stylesheet"
+          href="../css/estilos_generales.css">
+
 </head>
+
 
 <body>
 
-    <h1>Gestión de Servicios</h1>
 
-    <p>
+<nav class="navbar">
+
+    <a href="../index.php"
+       class="logo">
+
+        FilaCeroCR
+
+    </a>
+
+
+    <div class="nav-links">
+
         <a href="panel_admin.php">
-            Volver al Panel Administrativo
+            Inicio
         </a>
-    </p>
 
-    <hr>
+        <a href="servicios.php">
+            Servicios
+        </a>
 
-    <h2>Agregar Servicio</h2>
+        <a href="clientes.php">
+            Clientes
+        </a>
 
-    <form method="POST">
+        <a href="citas.php">
+            Citas
+        </a>
 
-        <label>Nombre del servicio:</label>
-        <br>
+        <a href="horarios.php">
+            Horarios
+        </a>
 
-        <input type="text"
-               name="nombre"
-               required>
+        <a href="../cerrar_sesion.php">
+            Cerrar sesión
+        </a>
 
-        <br><br>
+    </div>
 
-
-        <label>Descripción:</label>
-        <br>
-
-        <textarea name="descripcion"></textarea>
-
-        <br><br>
-
-
-        <label>Duración en minutos:</label>
-        <br>
-
-        <input type="number"
-               name="duracion"
-               min="1"
-               required>
-
-        <br><br>
-
-        <button type="submit"
-                name="agregar">
-
-            Agregar Servicio
-
-        </button>
-
-    </form>
+</nav>
 
 
-    <hr>
+<div class="contenedor">
 
 
-    <h2>Servicios Registrados</h2>
+    <div class="encabezado-flex">
 
-    <table border="1"
-           cellpadding="8"
-           cellspacing="0">
+        <div class="titulo-seccion">
 
-        <tr>
+            <h1>Gestión de Servicios</h1>
 
-            <th>ID</th>
-            <th>Servicio</th>
-            <th>Descripción</th>
-            <th>Duración</th>
-            <th>Acciones</th>
+            <p>
+                Agrega, modifica y administra
+                los servicios disponibles en FilaCeroCR.
+            </p>
 
-        </tr>
+        </div>
 
-        <?php
+        <a href="panel_admin.php"
+           class="btn btn-outline">
 
-        if ($resultado->num_rows > 0) {
+            Volver al panel
 
-            while ($row = $resultado->fetch_assoc()) {
+        </a>
 
-                echo "<tr>";
+    </div>
 
-                echo "<td>" . $row['id_servicio'] . "</td>";
 
-                echo "<td>" .
-                     htmlspecialchars($row['nombre_servicio']) .
-                     "</td>";
+    <div class="form-card">
 
-                echo "<td>" .
-                     htmlspecialchars($row['descripcion']) .
-                     "</td>";
+        <h2>Agregar nuevo servicio</h2>
 
-                echo "<td>" .
-                     $row['duracion'] .
-                     " minutos</td>";
 
-                echo "<td>";
+        <form method="POST"
+              style="padding:0; border:none; box-shadow:none; margin:0;">
 
-                echo "<a href='editar_servicio.php?id=" .
-                     $row['id_servicio'] .
-                     "'>Editar</a>";
 
-                echo " | ";
+            <label>
+                Nombre del servicio
+            </label>
 
-                echo "<a href='servicios.php?eliminar=" .
-                     $row['id_servicio'] .
-                     "'>Eliminar</a>";
+            <input type="text"
+                   name="nombre"
+                   placeholder="Ejemplo: Corte de cabello"
+                   required>
 
-                echo "</td>";
 
-                echo "</tr>";
+            <label>
+                Descripción
+            </label>
+
+            <textarea name="descripcion"
+                      placeholder="Describe brevemente el servicio"></textarea>
+
+
+            <label>
+                Duración en minutos
+            </label>
+
+            <input type="number"
+                   name="duracion"
+                   min="1"
+                   placeholder="Ejemplo: 30"
+                   required>
+
+
+            <button type="submit"
+                    name="agregar"
+                    class="btn btn-primary">
+
+                Agregar servicio
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    <div class="titulo-seccion">
+
+        <h2>Servicios registrados</h2>
+
+        <p>
+            Consulta y administra los servicios
+            registrados actualmente.
+        </p>
+
+    </div>
+
+
+    <div class="tabla-contenedor">
+
+        <table>
+
+            <tr>
+
+                <th>ID</th>
+                <th>Servicio</th>
+                <th>Descripción</th>
+                <th>Duración</th>
+                <th>Acciones</th>
+
+            </tr>
+
+
+            <?php
+
+            if ($resultado->num_rows > 0) {
+
+                while ($row = $resultado->fetch_assoc()) {
+
+                    echo "<tr>";
+
+                    echo "<td>" .
+                         $row['id_servicio'] .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['nombre_servicio']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['descripcion']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         $row['duracion'] .
+                         " min</td>";
+
+                    echo "<td>";
+
+                    echo "<div class='acciones-tabla'>";
+
+                    echo "<a class='btn btn-outline btn-small'
+                              href='editar_servicio.php?id=" .
+                              $row['id_servicio'] .
+                              "'>
+                              Editar
+                          </a>";
+
+                    echo "<a class='btn btn-danger btn-small'
+                              href='servicios.php?eliminar=" .
+                              $row['id_servicio'] .
+                              "'
+                              onclick=\"return confirm('¿Deseas eliminar este servicio?');\">
+                              Eliminar
+                          </a>";
+
+                    echo "</div>";
+
+                    echo "</td>";
+
+                    echo "</tr>";
+                }
+
+            } else {
+
+                echo "<tr>
+
+                        <td colspan='5'>
+                            No hay servicios registrados.
+                        </td>
+
+                      </tr>";
             }
 
-        } else {
+            ?>
 
-            echo "<tr>
-                    <td colspan='5'>
-                        No hay servicios registrados.
-                    </td>
-                  </tr>";
-        }
+        </table>
 
-        ?>
+    </div>
 
-    </table>
+
+</div>
+
 
 </body>
 

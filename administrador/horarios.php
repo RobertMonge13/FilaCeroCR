@@ -82,7 +82,7 @@ $sql_horarios = "SELECT h.id_horario,
                         h.disponible
                  FROM horarios h
                  JOIN usuarios u
-                 ON h.id_profesional = u.id_usuario
+                    ON h.id_profesional = u.id_usuario
                  ORDER BY h.fecha ASC, h.hora ASC";
 
 $horarios = $conexion->query($sql_horarios);
@@ -90,6 +90,7 @@ $horarios = $conexion->query($sql_horarios);
 ?>
 
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
@@ -101,175 +102,288 @@ $horarios = $conexion->query($sql_horarios);
 
     <title>Gestión de Horarios - FilaCeroCR</title>
 
+    <link rel="stylesheet"
+          href="../css/estilos_generales.css">
+
 </head>
+
 
 <body>
 
-    <h1>Gestión de Horarios</h1>
 
-    <p>
+<nav class="navbar">
+
+    <a href="../index.php"
+       class="logo">
+
+        FilaCeroCR
+
+    </a>
+
+
+    <div class="nav-links">
+
         <a href="panel_admin.php">
-            Volver al Panel Administrativo
+            Inicio
         </a>
-    </p>
 
-    <hr>
+        <a href="servicios.php">
+            Servicios
+        </a>
 
-    <h2>Agregar Horario</h2>
+        <a href="clientes.php">
+            Clientes
+        </a>
 
-    <form method="POST">
+        <a href="citas.php">
+            Citas
+        </a>
 
-        <label>Profesional:</label>
-        <br>
+        <a href="horarios.php">
+            Horarios
+        </a>
 
-        <select name="id_profesional" required>
+        <a href="../cerrar_sesion.php">
+            Cerrar sesión
+        </a>
 
-            <option value="">
-                Seleccione un profesional
-            </option>
+    </div>
+
+</nav>
+
+
+<div class="contenedor">
+
+
+    <div class="encabezado-flex">
+
+        <div class="titulo-seccion">
+
+            <h1>Gestión de Horarios</h1>
+
+            <p>
+                Administra la disponibilidad
+                de los profesionales de FilaCeroCR.
+            </p>
+
+        </div>
+
+
+        <a href="panel_admin.php"
+           class="btn btn-outline">
+
+            Volver al panel
+
+        </a>
+
+    </div>
+
+
+
+    <div class="form-card">
+
+        <h2>Agregar nuevo horario</h2>
+
+
+        <form method="POST"
+              style="padding:0;
+                     border:none;
+                     box-shadow:none;
+                     margin:0;">
+
+
+            <label>
+                Profesional
+            </label>
+
+            <select name="id_profesional"
+                    required>
+
+                <option value="">
+                    Seleccione un profesional
+                </option>
+
+
+                <?php
+
+                while ($row = $profesionales->fetch_assoc()) {
+
+                    echo "<option value='" .
+                         $row['id_usuario'] .
+                         "'>";
+
+                    echo htmlspecialchars($row['nombre']);
+
+                    echo "</option>";
+                }
+
+                ?>
+
+            </select>
+
+
+            <label>
+                Fecha
+            </label>
+
+            <input type="date"
+                   name="fecha"
+                   required>
+
+
+            <label>
+                Hora
+            </label>
+
+            <input type="time"
+                   name="hora"
+                   required>
+
+
+            <button type="submit"
+                    name="agregar"
+                    class="btn btn-primary">
+
+                Agregar horario
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+
+    <div class="titulo-seccion">
+
+        <h2>Horarios registrados</h2>
+
+        <p>
+            Consulta y controla la disponibilidad
+            de los horarios registrados.
+        </p>
+
+    </div>
+
+
+
+    <div class="tabla-contenedor">
+
+        <table>
+
+
+            <tr>
+
+                <th>ID</th>
+                <th>Profesional</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Disponibilidad</th>
+                <th>Acciones</th>
+
+            </tr>
+
 
             <?php
 
-            while ($row = $profesionales->fetch_assoc()) {
+            if ($horarios->num_rows > 0) {
 
-                echo "<option value='" .
-                     $row['id_usuario'] .
-                     "'>";
+                while ($row = $horarios->fetch_assoc()) {
 
-                echo htmlspecialchars($row['nombre']);
+                    echo "<tr>";
 
-                echo "</option>";
+                    echo "<td>" .
+                         $row['id_horario'] .
+                         "</td>";
+
+
+                    echo "<td>" .
+                         htmlspecialchars($row['profesional']) .
+                         "</td>";
+
+
+                    echo "<td>" .
+                         $row['fecha'] .
+                         "</td>";
+
+
+                    echo "<td>" .
+                         $row['hora'] .
+                         "</td>";
+
+
+                    echo "<td>";
+
+                    if ($row['disponible'] == 1) {
+
+                        echo "<strong>
+                                Disponible
+                              </strong>";
+
+                    } else {
+
+                        echo "No disponible";
+                    }
+
+                    echo "</td>";
+
+
+                    echo "<td>";
+
+                    echo "<div class='acciones-tabla'>";
+
+
+                    echo "<a class='btn btn-outline btn-small'
+                              href='horarios.php?cambiar=" .
+                              $row['id_horario'] .
+                              "'>
+
+                              Cambiar disponibilidad
+
+                          </a>";
+
+
+                    echo "<a class='btn btn-danger btn-small'
+                              href='horarios.php?eliminar=" .
+                              $row['id_horario'] .
+                              "'
+                              onclick=\"return confirm('¿Deseas eliminar este horario?');\">
+
+                              Eliminar
+
+                          </a>";
+
+
+                    echo "</div>";
+
+                    echo "</td>";
+
+
+                    echo "</tr>";
+                }
+
+            } else {
+
+                echo "<tr>
+
+                        <td colspan='6'>
+                            No hay horarios registrados.
+                        </td>
+
+                      </tr>";
             }
 
             ?>
 
-        </select>
 
-        <br><br>
+        </table>
 
-
-        <label>Fecha:</label>
-        <br>
-
-        <input type="date"
-               name="fecha"
-               required>
-
-        <br><br>
+    </div>
 
 
-        <label>Hora:</label>
-        <br>
+</div>
 
-        <input type="time"
-               name="hora"
-               required>
-
-        <br><br>
-
-
-        <button type="submit"
-                name="agregar">
-
-            Agregar Horario
-
-        </button>
-
-    </form>
-
-
-    <hr>
-
-
-    <h2>Horarios Registrados</h2>
-
-    <table border="1"
-           cellpadding="8"
-           cellspacing="0">
-
-        <tr>
-
-            <th>ID</th>
-            <th>Profesional</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Disponibilidad</th>
-            <th>Acciones</th>
-
-        </tr>
-
-
-        <?php
-
-        if ($horarios->num_rows > 0) {
-
-            while ($row = $horarios->fetch_assoc()) {
-
-                echo "<tr>";
-
-                echo "<td>" .
-                     $row['id_horario'] .
-                     "</td>";
-
-                echo "<td>" .
-                     htmlspecialchars($row['profesional']) .
-                     "</td>";
-
-                echo "<td>" .
-                     $row['fecha'] .
-                     "</td>";
-
-                echo "<td>" .
-                     $row['hora'] .
-                     "</td>";
-
-                echo "<td>";
-
-                if ($row['disponible'] == 1) {
-                    echo "Disponible";
-                } else {
-                    echo "No disponible";
-                }
-
-                echo "</td>";
-
-                echo "<td>";
-
-                echo "<a href='horarios.php?cambiar=" .
-                     $row['id_horario'] .
-                     "'>";
-
-                echo "Cambiar disponibilidad";
-
-                echo "</a>";
-
-                echo " | ";
-
-                echo "<a href='horarios.php?eliminar=" .
-                     $row['id_horario'] .
-                     "'>";
-
-                echo "Eliminar";
-
-                echo "</a>";
-
-                echo "</td>";
-
-                echo "</tr>";
-            }
-
-        } else {
-
-            echo "<tr>
-                    <td colspan='6'>
-                        No hay horarios registrados.
-                    </td>
-                  </tr>";
-        }
-
-        ?>
-
-    </table>
 
 </body>
 

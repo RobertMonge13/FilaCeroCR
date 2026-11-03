@@ -2,12 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../iniciar_sesion.php");
-    exit();
-}
-
-if ($_SESSION['rol'] != "administrador") {
+if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != "administrador") {
     header("Location: ../iniciar_sesion.php");
     exit();
 }
@@ -15,19 +10,19 @@ if ($_SESSION['rol'] != "administrador") {
 include("../conexion.php");
 
 
-// Cantidad de clientes
+// TOTAL DE CLIENTES
 $sql_clientes = "SELECT COUNT(*) AS total FROM clientes";
 $resultado_clientes = $conexion->query($sql_clientes);
 $total_clientes = $resultado_clientes->fetch_assoc()['total'];
 
 
-// Cantidad de servicios
+// TOTAL DE SERVICIOS
 $sql_servicios = "SELECT COUNT(*) AS total FROM servicios";
 $resultado_servicios = $conexion->query($sql_servicios);
 $total_servicios = $resultado_servicios->fetch_assoc()['total'];
 
 
-// Cantidad de citas
+// TOTAL DE CITAS
 $sql_citas = "SELECT COUNT(*) AS total FROM citas";
 $resultado_citas = $conexion->query($sql_citas);
 $total_citas = $resultado_citas->fetch_assoc()['total'];
@@ -45,77 +40,188 @@ $total_citas = $resultado_citas->fetch_assoc()['total'];
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Panel Administrador - FilaCeroCR</title>
+    <title>Panel Administrativo - FilaCeroCR</title>
+
+    <link rel="stylesheet"
+          href="../css/estilos_generales.css">
 
 </head>
 
+
 <body>
 
-    <h1>Panel Administrativo - FilaCeroCR</h1>
 
-    <h2>
-        Bienvenido,
-        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </h2>
+<nav class="navbar">
 
-    <p>
-        <a href="../cerrar_sesion.php">Cerrar Sesión</a>
-    </p>
+    <a href="../index.php"
+       class="logo">
 
+        FilaCeroCR
 
-    <hr>
+    </a>
 
 
-    <h2>Resumen General</h2>
+    <div class="nav-links">
 
-    <p>
-        Clientes registrados:
-        <?php echo $total_clientes; ?>
-    </p>
+        <a href="panel_admin.php">
+            Inicio
+        </a>
 
-    <p>
-        Servicios registrados:
-        <?php echo $total_servicios; ?>
-    </p>
+        <a href="servicios.php">
+            Servicios
+        </a>
 
-    <p>
-        Citas registradas:
-        <?php echo $total_citas; ?>
-    </p>
+        <a href="clientes.php">
+            Clientes
+        </a>
+
+        <a href="citas.php">
+            Citas
+        </a>
+
+        <a href="horarios.php">
+            Horarios
+        </a>
+
+        <a href="../cerrar_sesion.php">
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</nav>
 
 
-    <hr>
+<div class="contenedor">
 
 
-    <h2>Administración</h2>
+    <div class="titulo-seccion">
 
-    <ul>
+        <h1>
+            Panel Administrativo
+        </h1>
 
-        <li>
-            <a href="servicios.php">
-                Gestión de Servicios
+        <p>
+            Bienvenido,
+            <?php
+            echo htmlspecialchars($_SESSION['nombre']);
+            ?>.
+            Administra FilaCeroCR desde un solo lugar.
+        </p>
+
+    </div>
+
+
+    <div class="tarjetas">
+
+
+        <div class="tarjeta">
+
+            <h3>Clientes</h3>
+
+            <div class="numero">
+                <?php echo $total_clientes; ?>
+            </div>
+
+            <p>
+                Clientes registrados en la plataforma.
+            </p>
+
+            <a href="clientes.php"
+               class="btn btn-outline">
+
+                Ver clientes
+
             </a>
-        </li>
 
-        <li>
-            <a href="clientes.php">
-                Gestión de Clientes
+        </div>
+
+
+        <div class="tarjeta">
+
+            <h3>Servicios</h3>
+
+            <div class="numero">
+                <?php echo $total_servicios; ?>
+            </div>
+
+            <p>
+                Servicios disponibles actualmente.
+            </p>
+
+            <a href="servicios.php"
+               class="btn btn-outline">
+
+                Gestionar servicios
+
             </a>
-        </li>
 
-        <li>
-            <a href="citas.php">
-                Gestión de Citas
+        </div>
+
+
+        <div class="tarjeta">
+
+            <h3>Citas</h3>
+
+            <div class="numero">
+                <?php echo $total_citas; ?>
+            </div>
+
+            <p>
+                Citas registradas en el sistema.
+            </p>
+
+            <a href="citas.php"
+               class="btn btn-outline">
+
+                Gestionar citas
+
             </a>
-        </li>
 
-        <li>
-            <a href="horarios.php">
-                Gestión de Horarios
+        </div>
+
+
+        <div class="tarjeta">
+
+            <h3>Horarios</h3>
+
+            <p>
+                Configura la disponibilidad
+                de los profesionales.
+            </p>
+
+            <a href="horarios.php"
+               class="btn btn-outline">
+
+                Gestionar horarios
+
             </a>
-        </li>
 
-    </ul>
+        </div>
+
+
+    </div>
+
+
+    <div style="margin-top: 40px;">
+
+        <div class="tarjeta">
+
+            <h3>Administración de FilaCeroCR</h3>
+
+            <p>
+                Desde este panel puedes administrar servicios,
+                consultar clientes, controlar las citas registradas
+                y gestionar la disponibilidad de horarios.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
 
 </body>
 

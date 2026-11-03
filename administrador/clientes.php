@@ -10,88 +10,179 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != "administrador") {
 include("../conexion.php");
 
 
-// Consultar clientes registrados
-$sql = "SELECT * FROM clientes ORDER BY nombre ASC";
+// CONSULTAR CLIENTES
+$sql = "SELECT *
+        FROM clientes
+        ORDER BY nombre ASC";
 
 $resultado = $conexion->query($sql);
 
 ?>
 
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Gestión de Clientes - FilaCeroCR</title>
+
+    <link rel="stylesheet"
+          href="../css/estilos_generales.css">
+
 </head>
+
 
 <body>
 
-    <h1>Gestión de Clientes</h1>
 
-    <p>
+<nav class="navbar">
+
+    <a href="../index.php"
+       class="logo">
+
+        FilaCeroCR
+
+    </a>
+
+
+    <div class="nav-links">
+
         <a href="panel_admin.php">
-            Volver al Panel Administrativo
+            Inicio
         </a>
-    </p>
 
-    <hr>
+        <a href="servicios.php">
+            Servicios
+        </a>
 
-    <h2>Clientes Registrados</h2>
+        <a href="clientes.php">
+            Clientes
+        </a>
 
-    <table border="1"
-           cellpadding="8"
-           cellspacing="0">
+        <a href="citas.php">
+            Citas
+        </a>
 
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-        </tr>
+        <a href="horarios.php">
+            Horarios
+        </a>
 
-        <?php
+        <a href="../cerrar_sesion.php">
+            Cerrar sesión
+        </a>
 
-        if ($resultado->num_rows > 0) {
+    </div>
 
-            while ($row = $resultado->fetch_assoc()) {
+</nav>
 
-                echo "<tr>";
 
-                echo "<td>" .
-                     $row['id_cliente'] .
-                     "</td>";
+<div class="contenedor">
 
-                echo "<td>" .
-                     htmlspecialchars($row['nombre']) .
-                     "</td>";
 
-                echo "<td>" .
-                     htmlspecialchars($row['correo']) .
-                     "</td>";
+    <div class="encabezado-flex">
 
-                echo "<td>" .
-                     htmlspecialchars($row['telefono']) .
-                     "</td>";
+        <div class="titulo-seccion">
 
-                echo "</tr>";
+            <h1>Gestión de Clientes</h1>
+
+            <p>
+                Consulta la información de los clientes
+                registrados en FilaCeroCR.
+            </p>
+
+        </div>
+
+
+        <a href="panel_admin.php"
+           class="btn btn-outline">
+
+            Volver al panel
+
+        </a>
+
+    </div>
+
+
+    <div class="tarjeta"
+         style="margin-bottom: 30px;">
+
+        <h3>Clientes registrados</h3>
+
+        <p>
+            Desde esta sección puedes consultar
+            los datos de los clientes que utilizan la plataforma.
+        </p>
+
+    </div>
+
+
+    <div class="tabla-contenedor">
+
+        <table>
+
+            <tr>
+
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo electrónico</th>
+                <th>Teléfono</th>
+
+            </tr>
+
+
+            <?php
+
+            if ($resultado->num_rows > 0) {
+
+                while ($row = $resultado->fetch_assoc()) {
+
+                    echo "<tr>";
+
+                    echo "<td>" .
+                         $row['id_cliente'] .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['nombre']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['correo']) .
+                         "</td>";
+
+                    echo "<td>" .
+                         htmlspecialchars($row['telefono']) .
+                         "</td>";
+
+                    echo "</tr>";
+                }
+
+            } else {
+
+                echo "<tr>
+
+                        <td colspan='4'>
+                            No hay clientes registrados.
+                        </td>
+
+                      </tr>";
             }
 
-        } else {
+            ?>
 
-            echo "<tr>
-                    <td colspan='4'>
-                        No hay clientes registrados.
-                    </td>
-                  </tr>";
-        }
+        </table>
 
-        ?>
+    </div>
 
-    </table>
+
+</div>
+
 
 </body>
 
