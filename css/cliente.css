@@ -1,0 +1,26 @@
+/* Ajustes de marca sobre Bootstrap 5 */
+:root{
+  --bs-primary:#0B6E6E; --bs-primary-rgb:11,110,110;
+  --bs-body-bg:#F3F7F6; --bs-body-color:#10262B;
+  --bs-body-font-family:'Figtree','Segoe UI',Arial,sans-serif;
+  --bs-border-color:#D5E0DE;
+  --acento:#F4B731;
+}
+h1,h2,h3,h4,.navbar-brand{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif}
+h1{font-weight:800}
+.navbar-brand b{background:var(--acento);color:#10262B;border-radius:8px;padding:0 .45rem;margin-right:.4rem}
+.btn-primary{--bs-btn-bg:#0B6E6E;--bs-btn-border-color:#0B6E6E;--bs-btn-hover-bg:#08504F;--bs-btn-hover-border-color:#08504F;--bs-btn-active-bg:#08504F;--bs-btn-active-border-color:#08504F;--bs-btn-disabled-bg:#0B6E6E}
+.btn-outline-primary{--bs-btn-color:#0B6E6E;--bs-btn-border-color:#0B6E6E;--bs-btn-hover-bg:#0B6E6E;--bs-btn-hover-border-color:#0B6E6E;--bs-btn-active-bg:#0B6E6E;--bs-btn-active-border-color:#0B6E6E}
+.nav-pills{--bs-nav-pills-link-active-bg:#fff}
+.nav-pills .nav-link{color:#BCD0CE}
+.nav-pills .nav-link.active{color:#10262B}
+.nav-tabs{--bs-nav-tabs-link-active-border-color:transparent transparent var(--acento)}
+.nav-tabs .nav-link{border-width:0 0 3px;color:#5A6E72}
+.nav-tabs .nav-link.active{background:none;border-bottom-color:var(--acento);color:#10262B}
+.vista{display:none}
+.vista.visible{display:block}
+.dia{min-width:72px}
+.hora:disabled{text-decoration:line-through}
+.fecha-cita{background:#10262B;color:#fff;min-width:84px}
+.fecha-cita strong{font-family:'Bricolage Grotesque',sans-serif;font-size:1.6rem;line-height:1;display:block}
+.fecha-cita small{color:#BCD0CE}
