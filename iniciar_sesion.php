@@ -22,8 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nombre'] = $row['nombre'];
             $_SESSION['rol'] = $row['rol'];
 
-            header("Location: panel_profesional.php");
-            exit();
+           if ($row['rol'] == "administrador") {
+
+    header("Location: administrador/panel_admin.php");
+    exit();
+
+} else if ($row['rol'] == "profesional") {
+
+    header("Location: panel_profesional.php");
+    exit();
+
+}
         } else {
             $error = "Contraseña incorrecta.";
         }
